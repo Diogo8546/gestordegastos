@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App de Gastos v5</title>
+    <!-- Carrega o TailwindCSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Carrega a fonte 'Inter' (similar à do iOS) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Define a fonte padrão */
+        html {
+            color-scheme: dark; /* Ajuda a estilizar inputs nativos (como o de data) para o modo escuro */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* FIX: Impede a rolagem da página inteira */
+        }
+        
+        /* A tela principal do app */
+        .app-screen {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh; /* FIX: Trava a altura do app na altura da tela */
+            background-color: #030712; /* Fundo super escuro (gray-950) */
+            overflow: hidden; /* Garante que o conteúdo não vaze da tela */
+            
+            /* Para telas maiores (desktop), limitamos a largura para simular celular */
+            max-width: 420px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(255,255,255,0.05); /* Sombra clara para o modo escuro */
+        }
+        /* Esconde as setas de input[type=number] */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
+</head>
+<body class="bg-gray-900"> <!-- Fundo do body escuro -->
+
+    <!-- Wrapper que simula o iPhone 12 -->
+    <div class="app-screen">
+
+        <!-- 1. Cabeçalho Principal (Saldo) -->
+            <header class="bg-indigo-700 text-white p-6 rounded-b-3xl shadow-lg z-10 relative">
+                <div class="flex justify-between items-center"> <!-- Wrapper para alinhar saldo e config -->
+                    <div>
+                        <div class="text-sm font-medium opacity-80">Saldo Atual</div>
+                        <div id="balance" class="text-4xl font-bold mt-1">R$ 0,00</div>
+                    </div>
+                    <!-- (NOVO) Botão de Configurações -->
+                    <button id="config-btn" class="p-2 rounded-full hover:bg-black/20 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <!-- (NOVO) Menu de Configurações (Oculto) -->
+                <div id="config-menu" class="absolute top-20 right-6 bg-gray-700 text-white rounded-lg shadow-xl w-52 p-2 z-50 hidden">
+                    <button id="export-btn" class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-600 transition-colors">Exportar Backup (JSON)</button>
+                    <label for="import-file-input" class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-600 transition-colors block cursor-pointer">
+                        Importar Backup (JSON)
+                    </label>
+                    <input type="file" id="import-file-input" class="hidden" accept=".json">
+                </div>
+            </header>
+
+            <!-- 2. Cartões de Resumo (Receitas/Despesas) -->
+            <div class="grid grid-cols-2 gap-4 p-4 mt-[-40px]"> <!-- MT negativo para sobrepor o header -->
+                <!-- Card Receitas -->
+                <div class="bg-gray-800 p-4 rounded-2xl shadow-lg shadow-black/20 flex items-center gap-3 z-20">
+                    <!-- Ícone (seta para cima) -->
+                    <div class="bg-green-900/50 text-green-400 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0"> <!-- FIX: Adicionado flex-1 e min-w-0 para evitar overflow -->
+                        <div class="text-xs text-gray-400">Receitas</div>
+                        <div id="total-income" class="text-lg font-semibold text-green-400">R$ 0,00</div>
+                    </div>
+                </div>
+                <!-- Card Despesas -->
+                <div class="bg-gray-800 p-4 rounded-2xl shadow-lg shadow-black/20 flex items-center gap-3 z-20">
+                    <!-- Ícone (seta para baixo) -->
+                    <div class="bg-red-900/50 text-red-400 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                        </svg>
+                    </div>
+                    <div class="flex-1 min-w-0"> <!-- FIX: Adicionado flex-1 e min-w-0 para evitar overflow -->
+                        <div class="text-xs text-gray-400">Despesas</div>
+                        <div id="total-expense" class="text-lg font-semibold text-red-400">R$ 0,00</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2.5. Resumo de Gastos (Dia/Semana/Mês) -->
+            <div class="px-4 mt-4">
+                <h3 class="text-lg font-semibold text-gray-200 mb-2 px-2">Resumo de Gastos</h3>
+                <div class="grid grid-cols-3 gap-3">
+                    <!-- Card Hoje -->
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
+                        <div class="text-xs text-gray-400 text-center">Hoje</div>
+                        <div id="expense-today-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
+                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Pix:</span>
+                                <span id="expense-today-pix" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Cartão:</span>
+                                <span id="expense-today-credit" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card 7 Dias -->
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
+                        <div class="text-xs text-gray-400 text-center">7 Dias</div>
+                        <div id="expense-week-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
+                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Pix:</span>
+                                <span id="expense-week-pix" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Cartão:</span>
+                                <span id="expense-week-credit" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Mês -->
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
+                        <div class="text-xs text-gray-400 text-center">Mês</div>
+                        <div id="expense-month-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
+                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Pix:</span>
+                                <span id="expense-month-pix" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-300">Cartão:</span>
+                                <span id="expense-month-credit" class="font-semibold text-gray-100">R$ 0,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Lista de Transações Recentes -->
+            <main class="flex-1 overflow-y-auto px-4 pb-20 mt-4"> <!-- FIX: Adicionado mt-4 e flex-1/overflow-y-auto -->
+                <h2 class="text-xl font-bold text-gray-200 px-2 mb-3">Transações Recentes</h2>
+                <ul id="transaction-list" class="space-y-3">
+                    <!-- Transações serão injetadas aqui pelo JS -->
+                </ul>
+            </main>
+
+            <!-- 4. Botão Flutuante (FAB) para Adicionar -->
+            <button id="add-transaction-btn" class="absolute bottom-6 right-6 bg-indigo-500 text-white w-16 h-16 rounded-full flex items-center justify-center text-4xl shadow-lg transform hover:scale-105 transition-transform">
+                +
+            </button>
+
+            <!-- 5. Modal para Adicionar Transação (Oculto por padrão) -->
+            <div id="modal" class="absolute inset-0 bg-black/70 flex items-end justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+                <div id="modal-content" class="bg-gray-800 w-full rounded-t-3xl p-6 transform translate-y-full transition-transform duration-300">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-white">Nova Transação</h2>
+                    <form id="transaction-form" class="space-y-4">
+                        <!-- Tipo: Receita ou Despesa -->
+                        <div class="grid grid-cols-2 gap-2 rounded-lg bg-gray-700 p-1">
+                            <button type="button" id="btn-type-expense" class="p-2 rounded-md text-center font-semibold bg-indigo-500 text-white shadow">Despesa</button>
+                            <button type="button" id="btn-type-income" class="p-2 rounded-md text-center font-semibold text-gray-300">Receita</button>
+                        </div>
+                        <input type="hidden" id="type" value="expense"> <!-- Valor escondido -->
+
+                        <!-- Valor -->
+                        <div>
+                            <label for="amount" class="text-sm font-medium text-gray-300">Valor</label>
+                            <input type="number" id="amount" placeholder="0,00" class="w-full text-4xl font-bold border-none p-0 focus:ring-0 bg-transparent text-white" required>
+                        </div>
+
+                        <!-- Método de Pagamento (só para despesas) -->
+                        <div id="payment-method-selector" class="space-y-2">
+                            <label class="text-sm font-medium text-gray-300">Método de Pagamento</label>
+                            <div class="grid grid-cols-2 gap-2 rounded-lg bg-gray-700 p-1">
+                                <button type="button" id="btn-payment-pix" class="p-2 rounded-md text-center font-semibold bg-indigo-500 text-white shadow">Pix</button>
+                                <button type="button" id="btn-payment-credit" class="p-2 rounded-md text-center font-semibold text-gray-300">Cartão</button>
+                            </div>
+                        </div>
+                        <input type="hidden" id="payment-method" value="pix">
+                        
+                        <!-- Descrição -->
+                        <div>
+                            <label for="description" class="text-sm font-medium text-gray-300">Descrição</label>
+                            <input type="text" id="description" placeholder="Ex: Café da manhã" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
+                        </div>
+                        
+                        <!-- Categoria -->
+                        <div>
+                            <label for="category" class="text-sm font-medium text-gray-300">Categoria</label>
+                            <select id="category" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
+                                <!-- Opções de categoria serão preenchidas pelo JS -->
+                            </select>
+                        </div>
+
+                        <!-- Data -->
+                        <div>
+                            <label for="date" class="text-sm font-medium text-gray-300">Data e Hora</label>
+                            <input type="datetime-local" id="date" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
+                        </div>
+
+                        <!-- Botões do Formulário -->
+                        <div class="grid grid-cols-2 gap-4 pt-4">
+                            <button type="button" id="cancel-btn" class="w-full p-4 bg-gray-600 text-gray-100 rounded-lg font-semibold">Cancelar</button>
+                            <button type="submit" class="w-full p-4 bg-indigo-500 text-white rounded-lg font-semibold">Salvar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 6. (NOVO) Toast/Notificação (Oculto) -->
+        <div id="toast" class="absolute bottom-24 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-all duration-300 z-50">
+            Mensagem aqui
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Seletores do DOM ---
+            const balanceEl = document.getElementById('balance');
+            const totalIncomeEl = document.getElementById('total-income');
+            const totalExpenseEl = document.getElementById('total-expense');
+            const transactionListEl = document.getElementById('transaction-list');
+            const addBtn = document.getElementById('add-transaction-btn');
+            const modal = document.getElementById('modal');
+            const modalContent = document.getElementById('modal-content');
+            const cancelBtn = document.getElementById('cancel-btn');
+            const form = document.getElementById('transaction-form');
+            const btnTypeExpense = document.getElementById('btn-type-expense');
+            const btnTypeIncome = document.getElementById('btn-type-income');
+            const typeInput = document.getElementById('type');
+            const categorySelect = document.getElementById('category');
+            const amountInput = document.getElementById('amount');
+            const descriptionInput = document.getElementById('description');
+            const dateInput = document.getElementById('date');
+
+            // Novos seletores para Método de Pagamento
+            const paymentMethodSelector = document.getElementById('payment-method-selector');
+            const btnPaymentPix = document.getElementById('btn-payment-pix');
+            const btnPaymentCredit = document.getElementById('btn-payment-credit');
+            const paymentMethodInput = document.getElementById('payment-method');
+
+            // (NOVO) Seletores de Config e Backup
+            const configBtn = document.getElementById('config-btn');
+            const configMenu = document.getElementById('config-menu');
+            const exportBtn = document.getElementById('export-btn');
+            const importFileInput = document.getElementById('import-file-input');
+            const toastEl = document.getElementById('toast');
+
+
+            // --- Estado Inicial (Dados Fictícios) ---
+            // (NOVO) Carrega as transações do localStorage ou inicializa um array vazio
+            let transactions = JSON.parse(localStorage.getItem('expense_tracker_transactions')) || [];
+
+            const categories = {
+                expense: ['Alimentação', 'Moradia', 'Transporte', 'Lazer', 'Saúde', 'Outros'],
+                income: ['Salário', 'Freelance', 'Investimentos', 'Outros']
+            };
+
+            // (NOVO) Helper para salvar transações no localStorage
+            function saveTransactions() {
+                localStorage.setItem('expense_tracker_transactions', JSON.stringify(transactions));
+            }
+
+            // (NOVO) Mostra uma notificação (toast)
+            function showToast(message, isError = false) {
+                toastEl.textContent = message;
+                toastEl.classList.remove('opacity-0');
+                if (isError) {
+                    toastEl.classList.add('bg-red-500');
+                    toastEl.classList.remove('bg-green-500');
+                } else {
+                    toastEl.classList.remove('bg-red-500');
+                    toastEl.classList.add('bg-green-500');
+                }
+                
+                // Esconde após 3 segundos
+                setTimeout(() => {
+                    toastEl.classList.add('opacity-0');
+                }, 3000);
+            }
+
+            // --- Funções ---
+
+            // Formata um número para o padrão BRL (R$)
+            function formatCurrency(value) {
+                return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            }
+
+            // (Helper) Retorna a data/hora atual formatada para o input datetime-local
+            function getCurrentDateTimeLocal() {
+                const now = new Date();
+                // Ajusta para o fuso horário local
+                now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+                // Formata como YYYY-MM-DDTHH:MM
+                return now.toISOString().slice(0, 16);
+            }
+
+            // Abre o Modal
+            function openModal() {
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalContent.classList.remove('translate-y-full');
+                
+                // Define a data E HORA de hoje no formulário
+                dateInput.value = getCurrentDateTimeLocal();
+                // Reseta o formulário
+                form.reset();
+                // Define o tipo padrão (Despesa)
+                switchType('expense');
+            }
+
+            // Fecha o Modal
+            function closeModal() {
+                modal.classList.add('opacity-0', 'pointer-events-none');
+                modalContent.classList.add('translate-y-full');
+            }
+
+            // Alterna o tipo (Receita/Despesa) no formulário
+            function switchType(type) {
+                typeInput.value = type;
+                if (type === 'expense') {
+                    // Estiliza botão de despesa
+                    btnTypeExpense.classList.add('bg-indigo-500', 'text-white', 'shadow');
+                    btnTypeExpense.classList.remove('text-gray-300');
+                    // Estiliza botão de receita
+                    btnTypeIncome.classList.add('text-gray-300');
+                    btnTypeIncome.classList.remove('bg-indigo-500', 'text-white', 'shadow');
+                    // Mostra o seletor de método de pagamento
+                    paymentMethodSelector.style.display = 'block';
+                    // Define 'pix' como padrão ao mudar para despesa
+                    switchPaymentMethod('pix');
+                } else {
+                    // Estiliza botão de despesa
+                    btnTypeExpense.classList.remove('bg-indigo-500', 'text-white', 'shadow');
+                    btnTypeExpense.classList.add('text-gray-300');
+                    // Estiliza botão de receita
+                    btnTypeIncome.classList.add('bg-indigo-500', 'text-white', 'shadow');
+                    btnTypeIncome.classList.remove('text-gray-300');
+                    // Esconde o seletor de método de pagamento
+                    paymentMethodSelector.style.display = 'none';
+                }
+                updateCategoryOptions(type);
+            }
+
+            // (NOVO) Alterna o método de pagamento no formulário
+            function switchPaymentMethod(method) {
+                paymentMethodInput.value = method;
+                if (method === 'pix') {
+                    btnPaymentPix.classList.add('bg-indigo-500', 'text-white', 'shadow');
+                    btnPaymentPix.classList.remove('text-gray-300');
+                    btnPaymentCredit.classList.add('text-gray-300');
+                    btnPaymentCredit.classList.remove('bg-indigo-500', 'text-white', 'shadow');
+                } else { // 'credit'
+                    btnPaymentPix.classList.remove('bg-indigo-500', 'text-white', 'shadow');
+                    btnPaymentPix.classList.add('text-gray-300');
+                    btnPaymentCredit.classList.add('bg-indigo-500', 'text-white', 'shadow');
+                    btnPaymentCredit.classList.remove('text-gray-300');
+                }
+            }
+
+            // Atualiza as opções de categoria com base no tipo
+            function updateCategoryOptions(type) {
+                categorySelect.innerHTML = ''; // Limpa opções atuais
+                categories[type].forEach(category => {
+                    const option = document.createElement('option');
+                    option.value = category;
+                    option.textContent = category;
+                    categorySelect.appendChild(option);
+                });
+            }
+
+            // Adiciona uma nova transação
+            function addTransaction(e) {
+                e.preventDefault(); // Impede o envio padrão do formulário
+                
+                const type = typeInput.value;
+                const transaction = {
+                    id: Date.now(), // ID único
+                    type: type,
+                    description: descriptionInput.value,
+                    amount: parseFloat(amountInput.value.replace(',', '.')), // Converte para número
+                    category: categorySelect.value,
+                    date: dateInput.value, // Pega o valor do datetime-local
+                    // Adiciona o método de pagamento SOMENTE se for despesa
+                    paymentMethod: type === 'expense' ? paymentMethodInput.value : null 
+                };
+
+                // Adiciona a nova transação no início da lista
+                transactions.unshift(transaction);
+                
+                closeModal();
+                updateUI();
+                saveTransactions(); // (NOVO) Salva no localStorage
+            }
+
+            // Deleta uma transação
+            function deleteTransaction(id) {
+                // Filtra o array, mantendo apenas as transações com ID diferente
+                transactions = transactions.filter(tx => tx.id !== id);
+                updateUI(); // Atualiza a UI
+                saveTransactions(); // (NOVO) Salva no localStorage
+            }
+
+            // Renderiza um item de transação na lista
+            function renderTransactionItem(transaction) {
+                const { id, type, description, amount, category, date, paymentMethod } = transaction;
+                const isExpense = type === 'expense';
+                
+                const sign = isExpense ? '-' : '+';
+                const amountColor = isExpense ? 'text-red-500' : 'text-green-600';
+
+                // Formata a data e hora (Ex: 05/11 às 14:30)
+                const [datePart, timePart] = date.split('T');
+                const [year, month, day] = datePart.split('-');
+                const formattedDateTime = `${day}/${month} às ${timePart}`;
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="bg-gray-800 p-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 flex-1 min-w-0"> <!-- Permite que o conteúdo encolha -->
+                            <!-- Ícone da Categoria (Exemplo simples) -->
+                            <div class="w-10 h-10 rounded-full ${isExpense ? 'bg-red-900/50' : 'bg-green-900/50'} flex items-center justify-center text-xl shrink-0"> <!-- shrink-0 impede que o ícone encolha -->
+                                ${getCategoryIcon(category)}
+                            </div>
+                            <div class="flex-1 min-w-0"> <!-- Permite que o texto encolha e quebre linha -->
+                                <div class="font-semibold text-gray-100 truncate">${description}</div> <!-- 'truncate' impede o texto de vazar -->
+                                <!-- Mostra o método de pagamento se for despesa -->
+                                <div class="text-sm text-gray-400">${category} ${isExpense ? `(${paymentMethod === 'pix' ? 'Pix' : 'Cartão'})` : ''} - ${formattedDateTime}</div>
+                            </div>
+                        </div>
+                        <div class="${amountColor} font-bold text-lg text-right px-2"> <!-- text-right e padding -->
+                            ${sign} ${formatCurrency(amount)}
+                        </div>
+                        <!-- Botão de Deletar -->
+                        <button data-id="${id}" class="delete-btn text-gray-600 hover:text-red-400 p-1 shrink-0 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                transactionListEl.appendChild(li);
+            }
+
+            // (Helper) Retorna um emoji simples para a categoria
+            function getCategoryIcon(category) {
+                switch (category.toLowerCase()) {
+                    case 'alimentação': return '🍔';
+                    case 'moradia': return '🏠';
+                    case 'transporte': return '🚗';
+                    case 'lazer': return '🎉';
+                    case 'saúde': return '❤️';
+                    case 'salário': return '💰';
+                    case 'freelance': return '💻';
+                    default: return '💸';
+                }
+            }
+
+            // Atualiza toda a UI (Resumo e Lista)
+            function updateUI() {
+                // Limpa a lista antiga
+                transactionListEl.innerHTML = '';
+                
+                // Variáveis para o resumo
+                let totalIncome = 0;
+                let totalExpense = 0; // Total (Pix + Cartão)
+                let totalPixExpense = 0; // Apenas Pix
+                let totalCreditExpense = 0; // Apenas Cartão
+
+                // Variáveis para o Resumo de Gastos
+                let expenseTodayPix = 0, expenseTodayCredit = 0;
+                let expenseWeekPix = 0, expenseWeekCredit = 0;
+                let expenseMonthPix = 0, expenseMonthCredit = 0;
+
+
+                // Referências de data
+                const now = new Date();
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Hoje, 00:00
+                const sevenDaysAgoStart = new Date(todayStart);
+                sevenDaysAgoStart.setDate(todayStart.getDate() - 7); // 7 dias atrás, 00:00
+                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1); // Início deste mês, 00:00
+
+                // Se não houver transações, mostra uma mensagem
+                if (transactions.length === 0) {
+                    transactionListEl.innerHTML = `
+                        <li class="text-center text-gray-500 pt-10">
+                            Nenhuma transação registrada.
+                        </li>
+                    `;
+                } else {
+                    // Renderiza cada transação e calcula o resumo
+                    transactions.forEach(tx => {
+                        renderTransactionItem(tx);
+                        
+                        const txDate = new Date(tx.date); // Converte a data da transação
+
+                        if (tx.type === 'income') {
+                            totalIncome += tx.amount;
+                        } else {
+                            // Calcula gastos por período E por método de pagamento
+                            if (tx.paymentMethod === 'pix') {
+                                totalPixExpense += tx.amount;
+                                if (txDate >= todayStart) expenseTodayPix += tx.amount;
+                                if (txDate >= sevenDaysAgoStart) expenseWeekPix += tx.amount;
+                                if (txDate >= monthStart) expenseMonthPix += tx.amount;
+                            } else if (tx.paymentMethod === 'credit') {
+                                totalCreditExpense += tx.amount;
+                                if (txDate >= todayStart) expenseTodayCredit += tx.amount;
+                                if (txDate >= sevenDaysAgoStart) expenseWeekCredit += tx.amount;
+                                if (txDate >= monthStart) expenseMonthCredit += tx.amount;
+                            }
+                        }
+                    });
+                }
+
+                const balance = totalIncome - totalPixExpense; // Saldo SÓ desconta PIX
+                totalExpense = totalPixExpense + totalCreditExpense; // Card de despesas mostra o TOTAL
+
+                // Atualiza os valores no DOM
+                balanceEl.textContent = formatCurrency(balance);
+                totalIncomeEl.textContent = formatCurrency(totalIncome);
+                totalExpenseEl.textContent = formatCurrency(totalExpense);
+
+                // Atualiza os novos resumos de gastos (Hoje)
+                document.getElementById('expense-today-total').textContent = formatCurrency(expenseTodayPix + expenseTodayCredit);
+                document.getElementById('expense-today-pix').textContent = formatCurrency(expenseTodayPix);
+                document.getElementById('expense-today-credit').textContent = formatCurrency(expenseTodayCredit);
+                
+                // Atualiza os novos resumos de gastos (Semana)
+                document.getElementById('expense-week-total').textContent = formatCurrency(expenseWeekPix + expenseWeekCredit);
+                document.getElementById('expense-week-pix').textContent = formatCurrency(expenseWeekPix);
+                document.getElementById('expense-week-credit').textContent = formatCurrency(expenseWeekCredit);
+                
+                // Atualiza os novos resumos de gastos (Mês)
+                document.getElementById('expense-month-total').textContent = formatCurrency(expenseMonthPix + expenseMonthCredit);
+                document.getElementById('expense-month-pix').textContent = formatCurrency(expenseMonthPix);
+                document.getElementById('expense-month-credit').textContent = formatCurrency(expenseMonthCredit);
+            }
+
+            // (NOVO) Exporta dados como JSON
+            function exportData() {
+                const dataStr = JSON.stringify(transactions, null, 2); // JSON formatado
+                const blob = new Blob([dataStr], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+                a.download = `gastos_backup_${timestamp}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                configMenu.classList.add('hidden'); // Esconde o menu
+            }
+
+            // (NOVO) Importa dados do JSON
+            function importData(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        
+                        // Validação simples
+                        if (Array.isArray(importedData)) {
+                            // Substitui os dados atuais
+                            transactions = importedData;
+                            saveTransactions();
+                            updateUI();
+                            showToast('Backup importado com sucesso!');
+                        } else {
+                            throw new Error('Arquivo JSON inválido.');
+                        }
+                    } catch (error) {
+                        console.error('Erro ao importar:', error);
+                        showToast('Erro ao importar o arquivo.', true);
+                    }
+                };
+                reader.readAsText(file);
+                // Reseta o input para permitir importar o mesmo arquivo de novo
+                event.target.value = null; 
+            }
+
+            // --- Event Listeners ---
+            addBtn.addEventListener('click', openModal);
+            cancelBtn.addEventListener('click', closeModal);
+            // Fecha o modal ao clicar fora do conteúdo
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+            
+            // Listeners dos botões de tipo
+            btnTypeExpense.addEventListener('click', () => switchType('expense'));
+            btnTypeIncome.addEventListener('click', () => switchType('income'));
+            
+            // (NOVO) Listeners dos botões de método de pagamento
+            btnPaymentPix.addEventListener('click', () => switchPaymentMethod('pix'));
+            btnPaymentCredit.addEventListener('click', () => switchPaymentMethod('credit'));
+
+            // Listener do formulário
+            form.addEventListener('submit', addTransaction);
+
+            // (NOVO) Listeners do menu de Config
+            configBtn.addEventListener('click', () => {
+                configMenu.classList.toggle('hidden');
+            });
+            exportBtn.addEventListener('click', exportData);
+            importFileInput.addEventListener('change', importData);
+
+            // (NOVO) Fechar menu de config se clicar fora
+            document.addEventListener('click', (e) => {
+                // Fecha o menu se o clique NÃO for no botão E NÃO for dentro do menu
+                if (!configBtn.contains(e.target) && !configMenu.contains(e.target)) {
+                    configMenu.classList.add('hidden');
+                }
+            });
+
+
+            // Listener para os botões de deletar (usando delegação de evento)
+            transactionListEl.addEventListener('click', (e) => {
+                // Procura pelo botão de deletar mais próximo do clique
+                const deleteBtn = e.target.closest('.delete-btn');
+                
+                if (deleteBtn) {
+                    const id = Number(deleteBtn.dataset.id); // Pega o ID do atributo data-id
+                    deleteTransaction(id);
+                }
+            });
+
+            // --- Inicialização ---
+            updateUI(); // Renderiza a UI inicial (agora com dados salvos)
+        });
+    </script>
+
+</body>
+</html>
