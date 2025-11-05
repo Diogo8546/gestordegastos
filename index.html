@@ -12,7 +12,7 @@
     
     <!-- Android (Chrome) -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#4338ca"> <!-- Cor do header (indigo-700) -->
+    <meta name="theme-color" content="#115e59"> <!-- (ALTERADO) Cor do header (teal-800) -->
 
     <title>Meus Gastos</title> <!-- Título alterado -->
     
@@ -63,27 +63,36 @@
 </head>
 <body class="bg-gray-900"> <!-- Fundo do body escuro -->
 
-    <!-- Wrapper que simula o iPhone 12 -->
+    <!-- Wrapper que simula o iPhone -->
     <div class="app-screen">
 
         <!-- 1. Cabeçalho Principal (Saldo) -->
-            <header class="bg-indigo-700 text-white p-6 rounded-b-3xl shadow-lg z-30 relative"> <!-- (ALTERADO) z-10 para z-30 -->
+            <header class="bg-teal-800 text-white p-6 rounded-b-3xl shadow-lg z-30 relative"> <!-- (ALTERADO) Cor -->
                 <div class="flex justify-between items-center"> <!-- Wrapper para alinhar saldo e config -->
                     <div>
                         <div class="text-sm font-medium opacity-80">Saldo Atual</div>
                         <div id="balance" class="text-4xl font-bold mt-1">R$ 0,00</div>
                     </div>
-                    <!-- (NOVO) Botão de Configurações -->
-                    <button id="config-btn" class="p-2 rounded-full hover:bg-black/20 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </button>
+                    <!-- (ALTERADO) Wrapper para os botões -->
+                    <div class="flex items-center gap-2">
+                        <!-- (NOVO) Botão de Relatório -->
+                        <button id="report-btn" class="p-2 rounded-full hover:bg-black/20 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0h6m-6 0H5m6 0v-6m0 6v-6m0 6h2m-2 6h2m0 0V9m0 0h2a2 2 0 012 2v10m0 0V9" />
+                            </svg>
+                        </button>
+                        <!-- Botão de Configurações -->
+                        <button id="config-btn" class="p-2 rounded-full hover:bg-black/20 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <!-- (CORRIGIDO) SVG da engrenagem -->
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                
-                <!-- (NOVO) Menu de Configurações (Oculto) -->
-                <div id="config-menu" class="absolute top-20 right-6 bg-gray-700 text-white rounded-lg shadow-xl w-52 p-2 z-50 hidden">
+                <!-- (RESTAURADO) Menu de Configurações (Exportar/Importar) -->
+                <div id="config-menu" class="absolute right-6 mt-2 w-56 bg-gray-700 text-white rounded-lg shadow-xl p-2 z-50 hidden">
                     <button id="export-btn" class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-600 transition-colors">Exportar Backup (JSON)</button>
                     <label for="import-file-input" class="w-full text-left px-3 py-2 rounded-md hover:bg-gray-600 transition-colors block cursor-pointer">
                         Importar Backup (JSON)
@@ -122,63 +131,71 @@
                 </div>
             </div>
 
-            <!-- 2.5. Resumo de Gastos (Dia/Semana/Mês) -->
-            <div class="px-4 mt-4">
+            <!-- (RESTAURADO) Resumo de Gastos (Hoje, Semana, Mês) -->
+            <div class="px-4 mt-6">
                 <h3 class="text-lg font-semibold text-gray-200 mb-2 px-2">Resumo de Gastos</h3>
                 <div class="grid grid-cols-3 gap-3">
                     <!-- Card Hoje -->
-                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
-                        <div class="text-xs text-gray-400 text-center">Hoje</div>
-                        <div id="expense-today-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
-                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Pix:</span>
-                                <span id="expense-today-pix" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Cartão:</span>
-                                <span id="expense-today-credit" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm text-center">
+                        <div class="text-xs font-medium text-gray-400">Hoje</div>
+                        <div id="expense-today-total" class="text-lg font-bold text-gray-100 mt-1">R$ 0,00</div> <!-- (ALTERADO) Cor -->
+                        <div class="text-xs text-gray-500 mt-1">
+                            Pix: <span id="expense-today-pix">R$ 0,00</span><br>
+                            Cartão: <span id="expense-today-credit">R$ 0,00</span>
                         </div>
                     </div>
                     <!-- Card 7 Dias -->
-                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
-                        <div class="text-xs text-gray-400 text-center">7 Dias</div>
-                        <div id="expense-week-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
-                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Pix:</span>
-                                <span id="expense-week-pix" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Cartão:</span>
-                                <span id="expense-week-credit" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm text-center">
+                        <div class="text-xs font-medium text-gray-400">7 Dias</div>
+                        <div id="expense-week-total" class="text-lg font-bold text-gray-100 mt-1">R$ 0,00</div> <!-- (ALTERADO) Cor -->
+                        <div class="text-xs text-gray-500 mt-1">
+                            Pix: <span id="expense-week-pix">R$ 0,00</span><br>
+                            Cartão: <span id="expense-week-credit">R$ 0,00</span>
                         </div>
                     </div>
                     <!-- Card Mês -->
-                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm">
-                        <div class="text-xs text-gray-400 text-center">Mês</div>
-                        <div id="expense-month-total" class="text-lg font-bold text-gray-100 text-center mb-1">R$ 0,00</div>
-                        <div class="text-xs space-y-0.5 border-t pt-1 mt-1 border-gray-700">
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Pix:</span>
-                                <span id="expense-month-pix" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="text-gray-300">Cartão:</span>
-                                <span id="expense-month-credit" class="font-semibold text-gray-100">R$ 0,00</span>
-                            </div>
+                    <div class="bg-gray-800 p-3 rounded-xl shadow-sm text-center">
+                        <div class="text-xs font-medium text-gray-400">Mês Atual</div>
+                        <div id="expense-month-total" class="text-lg font-bold text-gray-100 mt-1">R$ 0,00</div> <!-- (ALTERADO) Cor -->
+                        <div class="text-xs text-gray-500 mt-1">
+                            Pix: <span id="expense-month-pix">R$ 0,00</span><br>
+                            Cartão: <span id="expense-month-credit">R$ 0,00</span>
                         </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- 3. Lista de Transações Recentes -->
-            <main class="flex-1 overflow-y-auto px-4 pb-20 mt-4"> <!-- FIX: Adicionado mt-4 e flex-1/overflow-y-auto -->
+            <main class="flex-1 overflow-y-auto px-4 pb-20 mt-6">
                 <h2 class="text-xl font-bold text-gray-200 px-2 mb-3">Transações Recentes</h2>
                 <ul id="transaction-list" class="space-y-3">
                     <!-- Transações serão injetadas aqui pelo JS -->
+                    <!-- Exemplo de item (será removido no JS) -->
+                    <!--
+                    <li class="flex items-center justify-between bg-gray-800 p-4 rounded-xl shadow-sm">
+                        <div class="flex items-center gap-4">
+                            <div class="p-2 bg-gray-700 rounded-full">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A2 2 0 013 8V5a2 2 0 012-2z" />
+                                </svg>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="text-md font-semibold text-gray-100 truncate">Café da Manhã</div>
+                                <div class="text-sm text-gray-400">Alimentação (Pix)</div>
+                            </div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <div class="text-lg font-bold text-red-400">- R$ 15,00</div>
+                            <div class="text-xs text-gray-500">05 Nov, 08:30</div>
+                        </div>
+                        <button class="delete-btn ml-2 text-gray-600 hover:text-red-500 transition-colors" data-id="1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                    </li>
+                    -->
                 </ul>
             </main>
 
@@ -202,7 +219,7 @@
                         <!-- Valor -->
                         <div>
                             <label for="amount" class="text-sm font-medium text-gray-300">Valor</label>
-                            <input type="number" id="amount" placeholder="0,00" class="w-full text-4xl font-bold border-none p-0 focus:ring-0 bg-transparent text-white" required>
+                            <input type="text" inputmode="decimal" id="amount" placeholder="0,00" class="w-full text-4xl font-bold border-none p-0 focus:ring-0 bg-transparent text-white" required>
                         </div>
 
                         <!-- Método de Pagamento (só para despesas) -->
@@ -221,12 +238,14 @@
                             <input type="text" id="description" placeholder="Ex: Café da manhã" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
                         </div>
                         
-                        <!-- Categoria -->
+                        <!-- Categoria (ALTERADO para input com datalist) -->
                         <div>
                             <label for="category" class="text-sm font-medium text-gray-300">Categoria</label>
-                            <select id="category" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
+                            <!-- (ALTERADO) Trocado select por input com datalist -->
+                            <input type="text" id="category" list="category-list" placeholder="Ex: Alimentação" class="w-full p-3 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1" required>
+                            <datalist id="category-list">
                                 <!-- Opções de categoria serão preenchidas pelo JS -->
-                            </select>
+                            </datalist>
                         </div>
 
                         <!-- Data -->
@@ -244,9 +263,39 @@
                 </div>
             </div>
 
+            <!-- (NOVO) 6. Modal para Relatórios (Oculto por padrão) -->
+            <div id="report-modal" class="absolute inset-0 bg-black/70 flex items-end justify-center z-50 transition-opacity duration-300 opacity-0 pointer-events-none">
+                <div id="report-modal-content" class="bg-gray-800 w-full rounded-t-3xl p-6 transform translate-y-full transition-transform duration-300">
+                    <h2 class="text-2xl font-bold text-center mb-6 text-white">Gerar Relatório</h2>
+                    
+                    <!-- Conteúdo do Relatório (movido para cá) -->
+                    <div class="bg-gray-800 rounded-xl shadow-sm">
+                        <div class="grid grid-cols-2 gap-3 mb-3">
+                            <div>
+                                <label for="report-start-date" class="text-xs font-medium text-gray-400">Data Início</label>
+                                <input type="date" id="report-start-date" class="w-full p-2 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1 text-sm">
+                            </div>
+                            <div>
+                                <label for="report-end-date" class="text-xs font-medium text-gray-400">Data Fim</label>
+                                <input type="date" id="report-end-date" class="w-full p-2 bg-gray-700 border border-gray-600 text-white rounded-lg mt-1 text-sm">
+                            </div>
+                        </div>
+                        <button id="generate-report-btn" class="w-full p-3 bg-indigo-500 text-white rounded-lg font-semibold transition-colors hover:bg-indigo-600">Gerar</a-button>
+                        <!-- Container de resultados com rolagem interna -->
+                        <div id="report-results" class="mt-4 text-gray-300 hidden max-h-60 overflow-y-auto">
+                            <!-- Resultados do relatório serão injetados aqui -->
+                        </div>
+                    </div>
+                    <!-- Botão de Fechar -->
+                    <div class="pt-4">
+                        <button type="button" id="report-modal-close-btn" class="w-full p-4 bg-gray-600 text-gray-100 rounded-lg font-semibold">Fechar</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- 6. (NOVO) Toast/Notificação (Oculto) -->
+        <!-- 7. (NOVO) Toast/Notificação (Oculto) -->
         <div id="toast" class="absolute bottom-24 left-1/2 -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg opacity-0 transition-all duration-300 z-50">
             Mensagem aqui
         </div>
@@ -267,7 +316,7 @@
             const btnTypeExpense = document.getElementById('btn-type-expense');
             const btnTypeIncome = document.getElementById('btn-type-income');
             const typeInput = document.getElementById('type');
-            const categorySelect = document.getElementById('category');
+            const categoryInput = document.getElementById('category'); // (ALTERADO) de categorySelect para categoryInput
             const amountInput = document.getElementById('amount');
             const descriptionInput = document.getElementById('description');
             const dateInput = document.getElementById('date');
@@ -284,20 +333,50 @@
             const exportBtn = document.getElementById('export-btn');
             const importFileInput = document.getElementById('import-file-input');
             const toastEl = document.getElementById('toast');
+ 
+            // (NOVO) Seletores de Relatório
+            const reportBtn = document.getElementById('report-btn'); // (NOVO) Botão do header
+            const reportModal = document.getElementById('report-modal'); // (NOVO) Modal
+            const reportModalContent = document.getElementById('report-modal-content'); // (NOVO) Conteúdo do Modal
+            const reportModalCloseBtn = document.getElementById('report-modal-close-btn'); // (NOVO) Botão de fechar
+            const reportStartDateEl = document.getElementById('report-start-date');
+            const reportEndDateEl = document.getElementById('report-end-date');
+            const generateReportBtnEl = document.getElementById('generate-report-btn');
+            const reportResultsEl = document.getElementById('report-results');
+
+            // (NOVO) Seletores do Resumo de Gastos
+            const expenseTodayTotalEl = document.getElementById('expense-today-total');
+            const expenseTodayPixEl = document.getElementById('expense-today-pix');
+            const expenseTodayCreditEl = document.getElementById('expense-today-credit');
+            const expenseWeekTotalEl = document.getElementById('expense-week-total');
+            const expenseWeekPixEl = document.getElementById('expense-week-pix');
+            const expenseWeekCreditEl = document.getElementById('expense-week-credit');
+            const expenseMonthTotalEl = document.getElementById('expense-month-total');
+            const expenseMonthPixEl = document.getElementById('expense-month-pix');
+            const expenseMonthCreditEl = document.getElementById('expense-month-credit');
 
 
-            // --- Estado Inicial (Dados Fictícios) ---
+            // --- Estado Inicial ---
             // (NOVO) Carrega as transações do localStorage ou inicializa um array vazio
             let transactions = JSON.parse(localStorage.getItem('expense_tracker_transactions')) || [];
 
-            const categories = {
+            // (ALTERADO) Define as categorias PADRÃO
+            const defaultCategories = {
                 expense: ['Alimentação', 'Moradia', 'Transporte', 'Lazer', 'Saúde', 'Outros'],
                 income: ['Salário', 'Freelance', 'Investimentos', 'Outros']
             };
+            // (NOVO) Carrega categorias salvas ou usa o padrão
+            let savedCategories = JSON.parse(localStorage.getItem('expense_tracker_categories')) || defaultCategories;
+
 
             // (NOVO) Helper para salvar transações no localStorage
             function saveTransactions() {
                 localStorage.setItem('expense_tracker_transactions', JSON.stringify(transactions));
+            }
+
+            // (NOVO) Helper para salvar categorias no localStorage
+            function saveCategories() {
+                localStorage.setItem('expense_tracker_categories', JSON.stringify(savedCategories));
             }
 
             // (NOVO) Mostra uma notificação (toast)
@@ -322,7 +401,9 @@
 
             // Formata um número para o padrão BRL (R$)
             function formatCurrency(value) {
-                return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                // Garante que o valor é um número antes de formatar
+                const numberValue = Number(value) || 0;
+                return numberValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
             }
 
             // (Helper) Retorna a data/hora atual formatada para o input datetime-local
@@ -353,6 +434,24 @@
                 modalContent.classList.add('translate-y-full');
             }
 
+            // (NOVO) Abre o Modal de Relatório
+            function openReportModal() {
+                reportModal.classList.remove('opacity-0', 'pointer-events-none');
+                reportModalContent.classList.remove('translate-y-full');
+                // Limpa resultados antigos ao abrir
+                reportResultsEl.classList.add('hidden');
+                reportResultsEl.innerHTML = '';
+                // Limpa as datas
+                reportStartDateEl.value = '';
+                reportEndDateEl.value = '';
+            }
+
+            // (NOVO) Fecha o Modal de Relatório
+            function closeReportModal() {
+                reportModal.classList.add('opacity-0', 'pointer-events-none');
+                reportModalContent.classList.add('translate-y-full');
+            }
+
             // Alterna o tipo (Receita/Despesa) no formulário
             function switchType(type) {
                 typeInput.value = type;
@@ -362,22 +461,26 @@
                     btnTypeExpense.classList.remove('text-gray-300');
                     // Estiliza botão de receita
                     btnTypeIncome.classList.add('text-gray-300');
-                    btnTypeIncome.classList.remove('bg-indigo-500', 'text-white', 'shadow');
-                    // Mostra o seletor de método de pagamento
-                    paymentMethodSelector.style.display = 'block';
-                    // Define 'pix' como padrão ao mudar para despesa
-                    switchPaymentMethod('pix');
-                } else {
+                    btnTypeIncome.classList.remove('bg-indigo-500', 'text-white', 'shadow'); // Garante a remoção
+                    
+                    // (CORRIGIDO) MOSTRA o seletor de método de pagamento
+                    paymentMethodSelector.style.display = 'block'; 
+                    
+                    // Define o método padrão (Pix) ao trocar para despesa
+                    switchPaymentMethod('pix'); 
+
+                } else { // (CORRIGIDO) Se for 'income'
                     // Estiliza botão de despesa
                     btnTypeExpense.classList.remove('bg-indigo-500', 'text-white', 'shadow');
                     btnTypeExpense.classList.add('text-gray-300');
                     // Estiliza botão de receita
                     btnTypeIncome.classList.add('bg-indigo-500', 'text-white', 'shadow');
                     btnTypeIncome.classList.remove('text-gray-300');
-                    // Esconde o seletor de método de pagamento
+                    
+                    // (CORRIGIDO) ESCONDE o seletor de método de pagamento
                     paymentMethodSelector.style.display = 'none';
                 }
-                updateCategoryOptions(type);
+                updateCategoryDatalist(type); // (ALTERADO) Nome da função
             }
 
             // (NOVO) Alterna o método de pagamento no formulário
@@ -396,229 +499,340 @@
                 }
             }
 
-            // Atualiza as opções de categoria com base no tipo
-            function updateCategoryOptions(type) {
-                categorySelect.innerHTML = ''; // Limpa opções atuais
-                categories[type].forEach(category => {
+            // (ALTERADO) Atualiza o DATALIST de categoria com base no tipo
+            function updateCategoryDatalist(type) {
+                const datalist = document.getElementById('category-list');
+                datalist.innerHTML = ''; // Limpa opções atuais
+                
+                // (ALTERADO) Usa a lista de 'savedCategories'
+                savedCategories[type].forEach(category => {
                     const option = document.createElement('option');
                     option.value = category;
-                    option.textContent = category;
-                    categorySelect.appendChild(option);
+                    datalist.appendChild(option);
                 });
             }
 
-            // Adiciona uma nova transação
+            // (CORRIGIDO) Adiciona uma nova transação
             function addTransaction(e) {
                 e.preventDefault(); // Impede o envio padrão do formulário
                 
                 const type = typeInput.value;
+                const newCategory = categoryInput.value.trim();
+                const amount = parseFloat(amountInput.value.replace(',', '.')); // Converte para número
+
+                // Validações
+                if (isNaN(amount) || amount <= 0) {
+                    showToast('Por favor, insira um valor válido.', true);
+                    return;
+                }
+                 if (!descriptionInput.value.trim()) {
+                    showToast('Por favor, insira uma descrição.', true);
+                    return;
+                }
+                if (!newCategory) {
+                    showToast('Por favor, insira uma categoria.', true);
+                    return;
+                }
+                
                 const transaction = {
                     id: Date.now(), // ID único
                     type: type,
                     description: descriptionInput.value,
-                    amount: parseFloat(amountInput.value.replace(',', '.')), // Converte para número
-                    category: categorySelect.value,
+                    amount: amount,
+                    category: newCategory, 
                     date: dateInput.value, // Pega o valor do datetime-local
-                    // Adiciona o método de pagamento SOMENTE se for despesa
                     paymentMethod: type === 'expense' ? paymentMethodInput.value : null 
                 };
 
-                // Adiciona a nova transação no início da lista
-                transactions.unshift(transaction);
-                
-                closeModal();
+                // (NOVO) Adiciona a categoria à lista se for nova
+                if (newCategory && !savedCategories[type].includes(newCategory)) {
+                    savedCategories[type].push(newCategory);
+                    saveCategories(); // Salva a nova lista de categorias
+                }
+
+                // (CORRIGIDO) Lógica correta para adicionar a transação
+                transactions.push(transaction);
+                saveTransactions();
                 updateUI();
-                saveTransactions(); // (NOVO) Salva no localStorage
+                closeModal();
+                showToast('Transação salva com sucesso!');
             }
 
-            // Deleta uma transação
-            function deleteTransaction(id) {
-                // Filtra o array, mantendo apenas as transações com ID diferente
-                transactions = transactions.filter(tx => tx.id !== id);
-                updateUI(); // Atualiza a UI
-                saveTransactions(); // (NOVO) Salva no localStorage
-            }
-
-            // Renderiza um item de transação na lista
-            function renderTransactionItem(transaction) {
-                const { id, type, description, amount, category, date, paymentMethod } = transaction;
-                const isExpense = type === 'expense';
-                
+            // (NOVO) Adiciona um item de transação ao DOM
+            function addTransactionToDOM(transaction) {
+                const isExpense = transaction.type === 'expense';
                 const sign = isExpense ? '-' : '+';
-                const amountColor = isExpense ? 'text-red-500' : 'text-green-600';
-
-                // Formata a data e hora (Ex: 05/11 às 14:30)
-                const [datePart, timePart] = date.split('T');
-                const [year, month, day] = datePart.split('-');
-                const formattedDateTime = `${day}/${month} às ${timePart}`;
+                const amountColor = isExpense ? 'text-red-400' : 'text-green-400';
+                
+                // Formata a data (ex: 05 Nov, 12:30)
+                const txDate = new Date(transaction.date);
+                const formattedDate = txDate.toLocaleDateString('pt-BR', {
+                    day: '2-digit', 
+                    month: 'short'
+                });
+                const formattedTime = txDate.toLocaleTimeString('pt-BR', {
+                    hour: '2-digit', 
+                    minute: '2-digit'
+                });
 
                 const li = document.createElement('li');
+                li.classList.add('flex', 'items-center', 'justify-between', 'bg-gray-800', 'p-4', 'rounded-xl', 'shadow-sm');
+                
                 li.innerHTML = `
-                    <div class="bg-gray-800 p-4 rounded-xl shadow-sm flex items-center justify-between gap-3">
-                        <div class="flex items-center gap-3 flex-1 min-w-0"> <!-- Permite que o conteúdo encolha -->
-                            <!-- Ícone da Categoria (Exemplo simples) -->
-                            <div class="w-10 h-10 rounded-full ${isExpense ? 'bg-red-900/50' : 'bg-green-900/50'} flex items-center justify-center text-xl shrink-0"> <!-- shrink-0 impede que o ícone encolha -->
-                                ${getCategoryIcon(category)}
-                            </div>
-                            <div class="flex-1 min-w-0"> <!-- Permite que o texto encolha e quebre linha -->
-                                <div class="font-semibold text-gray-100 truncate">${description}</div> <!-- 'truncate' impede o texto de vazar -->
-                                <!-- Mostra o método de pagamento se for despesa -->
-                                <div class="text-sm text-gray-400">${category} ${isExpense ? `(${paymentMethod === 'pix' ? 'Pix' : 'Cartão'})` : ''} - ${formattedDateTime}</div>
-                            </div>
-                        </div>
-                        <div class="${amountColor} font-bold text-lg text-right px-2"> <!-- text-right e padding -->
-                            ${sign} ${formatCurrency(amount)}
-                        </div>
-                        <!-- Botão de Deletar -->
-                        <button data-id="${id}" class="delete-btn text-gray-600 hover:text-red-400 p-1 shrink-0 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    <div class="flex items-center gap-4 min-w-0"> <!-- (NOVO) min-w-0 para truncar texto -->
+                        <!-- Ícone (genérico) -->
+                        <div class="p-2 bg-gray-700 rounded-full flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-5 5a2 2 0 01-2.828 0l-7-7A2 2 0 013 8V5a2 2 0 012-2z" />
                             </svg>
-                        </button>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="text-md font-semibold text-gray-100 truncate">${transaction.description}</div>
+                            <div class="text-sm text-gray-400">
+                            ${transaction.category} 
+                            ${isExpense && transaction.paymentMethod ? `(${transaction.paymentMethod})` : ''}
+                            </div>
+                        </div>
                     </div>
+                    <div class="text-right flex-shrink-0 ml-2"> <!-- (NOVO) ml-2 -->
+                        <div class="text-lg font-bold ${amountColor}">${sign} ${formatCurrency(transaction.amount)}</div>
+                        <div class="text-xs text-gray-500">${formattedDate}, ${formattedTime}</div>
+                    </div>
+                    <!-- Botão Deletar -->
+                    <button class="delete-btn ml-2 text-gray-600 hover:text-red-500 transition-colors flex-shrink-0" data-id="${transaction.id}">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
                 `;
+                
                 transactionListEl.appendChild(li);
             }
 
-            // (Helper) Retorna um emoji simples para a categoria
-            function getCategoryIcon(category) {
-                switch (category.toLowerCase()) {
-                    case 'alimentação': return '🍔';
-                    case 'moradia': return '🏠';
-                    case 'transporte': return '🚗';
-                    case 'lazer': return '🎉';
-                    case 'saúde': return '❤️';
-                    case 'salário': return '💰';
-                    case 'freelance': return '💻';
-                    default: return '💸';
-                }
+            // (NOVO) Deleta uma transação
+            function deleteTransaction(id) {
+                transactions = transactions.filter(tx => tx.id !== id);
+                saveTransactions();
+                updateUI();
+                showToast('Transação removida.', false);
             }
 
-            // Atualiza toda a UI (Resumo e Lista)
+            // (NOVO) Atualiza a UI (Saldos, Resumos e Lista)
             function updateUI() {
-                // Limpa a lista antiga
+                // Limpa a lista de transações
                 transactionListEl.innerHTML = '';
                 
-                // Variáveis para o resumo
                 let totalIncome = 0;
-                let totalExpense = 0; // Total (Pix + Cartão)
-                let totalPixExpense = 0; // Apenas Pix
-                let totalCreditExpense = 0; // Apenas Cartão
-
-                // Variáveis para o Resumo de Gastos
-                let expenseTodayPix = 0, expenseTodayCredit = 0;
-                let expenseWeekPix = 0, expenseWeekCredit = 0;
-                let expenseMonthPix = 0, expenseMonthCredit = 0;
-
-
-                // Referências de data
+                let totalExpense = 0;
+                
+                // (NOVO) Objetos para o resumo de gastos
                 const now = new Date();
-                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()); // Hoje, 00:00
-                const sevenDaysAgoStart = new Date(todayStart);
-                sevenDaysAgoStart.setDate(todayStart.getDate() - 7); // 7 dias atrás, 00:00
-                const monthStart = new Date(now.getFullYear(), now.getMonth(), 1); // Início deste mês, 00:00
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                
+                const startOfWeek = new Date(today);
+                // Ajusta para o início da semana (Domingo = 0)
+                startOfWeek.setDate(today.getDate() - today.getDay()); 
+                startOfWeek.setHours(0, 0, 0, 0);
 
-                // Se não houver transações, mostra uma mensagem
-                if (transactions.length === 0) {
-                    transactionListEl.innerHTML = `
-                        <li class="text-center text-gray-500 pt-10">
-                            Nenhuma transação registrada.
-                        </li>
-                    `;
-                } else {
-                    // Renderiza cada transação e calcula o resumo
-                    transactions.forEach(tx => {
-                        renderTransactionItem(tx);
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                startOfMonth.setHours(0, 0, 0, 0);
+
+                let expenses = {
+                    today: { total: 0, pix: 0, credit: 0 },
+                    week: { total: 0, pix: 0, credit: 0 },
+                    month: { total: 0, pix: 0, credit: 0 }
+                };
+
+                // Ordena as transações: mais recentes primeiro
+                const sortedTransactions = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                // Itera sobre as transações
+                sortedTransactions.forEach(tx => {
+                    const txDate = new Date(tx.date); // Data da transação
+
+                    if (tx.type === 'income') {
+                        totalIncome += tx.amount;
+                    } else {
+                        totalExpense += tx.amount;
                         
-                        const txDate = new Date(tx.date); // Converte a data da transação
+                        // Lógica para o Resumo de Gastos
+                        const txDateOnly = new Date(txDate.getFullYear(), txDate.getMonth(), txDate.getDate());
 
-                        if (tx.type === 'income') {
-                            totalIncome += tx.amount;
-                        } else {
-                            // Calcula gastos por período E por método de pagamento
-                            if (tx.paymentMethod === 'pix') {
-                                totalPixExpense += tx.amount;
-                                if (txDate >= todayStart) expenseTodayPix += tx.amount;
-                                if (txDate >= sevenDaysAgoStart) expenseWeekPix += tx.amount;
-                                if (txDate >= monthStart) expenseMonthPix += tx.amount;
-                            } else if (tx.paymentMethod === 'credit') {
-                                totalCreditExpense += tx.amount;
-                                if (txDate >= todayStart) expenseTodayCredit += tx.amount;
-                                if (txDate >= sevenDaysAgoStart) expenseWeekCredit += tx.amount;
-                                if (txDate >= monthStart) expenseMonthCredit += tx.amount;
-                            }
+                        if (txDateOnly.getTime() === today.getTime()) {
+                            expenses.today.total += tx.amount;
+                            if (tx.paymentMethod === 'pix') expenses.today.pix += tx.amount;
+                            if (tx.paymentMethod === 'credit') expenses.today.credit += tx.amount;
                         }
-                    });
-                }
-
-                const balance = totalIncome - totalPixExpense; // Saldo SÓ desconta PIX
-                totalExpense = totalPixExpense + totalCreditExpense; // Card de despesas mostra o TOTAL
-
-                // Atualiza os valores no DOM
+                        if (txDate >= startOfWeek) {
+                            expenses.week.total += tx.amount;
+                            if (tx.paymentMethod === 'pix') expenses.week.pix += tx.amount;
+                            if (tx.paymentMethod === 'credit') expenses.week.credit += tx.amount;
+                        }
+                        if (txDate >= startOfMonth) {
+                            expenses.month.total += tx.amount;
+                            if (tx.paymentMethod === 'pix') expenses.month.pix += tx.amount;
+                            if (tx.paymentMethod === 'credit') expenses.month.credit += tx.amount;
+                        }
+                    }
+                    
+                    // Adiciona o item na lista
+                    addTransactionToDOM(tx);
+                });
+                
+                // Atualiza o Header e os Cards
+                const balance = totalIncome - totalExpense;
                 balanceEl.textContent = formatCurrency(balance);
+                // Muda a cor do saldo se for negativo
+                balanceEl.classList.toggle('text-red-400', balance < 0);
+                balanceEl.classList.toggle('text-white', balance >= 0);
+
                 totalIncomeEl.textContent = formatCurrency(totalIncome);
                 totalExpenseEl.textContent = formatCurrency(totalExpense);
-
-                // Atualiza os novos resumos de gastos (Hoje)
-                document.getElementById('expense-today-total').textContent = formatCurrency(expenseTodayPix + expenseTodayCredit);
-                document.getElementById('expense-today-pix').textContent = formatCurrency(expenseTodayPix);
-                document.getElementById('expense-today-credit').textContent = formatCurrency(expenseTodayCredit);
                 
-                // Atualiza os novos resumos de gastos (Semana)
-                document.getElementById('expense-week-total').textContent = formatCurrency(expenseWeekPix + expenseWeekCredit);
-                document.getElementById('expense-week-pix').textContent = formatCurrency(expenseWeekPix);
-                document.getElementById('expense-week-credit').textContent = formatCurrency(expenseWeekCredit);
+                // (NOVO) Atualiza o Resumo de Gastos
+                expenseTodayTotalEl.textContent = formatCurrency(expenses.today.total);
+                expenseTodayPixEl.textContent = formatCurrency(expenses.today.pix);
+                expenseTodayCreditEl.textContent = formatCurrency(expenses.today.credit);
                 
-                // Atualiza os novos resumos de gastos (Mês)
-                document.getElementById('expense-month-total').textContent = formatCurrency(expenseMonthPix + expenseMonthCredit);
-                document.getElementById('expense-month-pix').textContent = formatCurrency(expenseMonthPix);
-                document.getElementById('expense-month-credit').textContent = formatCurrency(expenseMonthCredit);
+                expenseWeekTotalEl.textContent = formatCurrency(expenses.week.total);
+                expenseWeekPixEl.textContent = formatCurrency(expenses.week.pix);
+                expenseWeekCreditEl.textContent = formatCurrency(expenses.week.credit);
+                
+                expenseMonthTotalEl.textContent = formatCurrency(expenses.month.total);
+                expenseMonthPixEl.textContent = formatCurrency(expenses.month.pix);
+                expenseMonthCreditEl.textContent = formatCurrency(expenses.month.credit);
             }
 
-            // (NOVO) Exporta dados como JSON
+            // (NOVO) Exporta os dados (JSON)
             function exportData() {
-                const dataStr = JSON.stringify(transactions, null, 2); // JSON formatado
-                const blob = new Blob([dataStr], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
+                const data = {
+                    transactions: transactions,
+                    categories: savedCategories
+                };
+                const dataStr = JSON.stringify(data, null, 2);
+                const dataBlob = new Blob([dataStr], {type: 'application/json'});
+                const url = URL.createObjectURL(dataBlob);
+                
                 const a = document.createElement('a');
                 a.href = url;
-                const timestamp = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
-                a.download = `gastos_backup_${timestamp}.json`;
+                a.download = `meus_gastos_backup_${new Date().toISOString().slice(0,10)}.json`;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-                configMenu.classList.add('hidden'); // Esconde o menu
+                
+                configMenu.classList.add('hidden');
+                showToast('Backup exportado com sucesso!');
             }
 
-            // (NOVO) Importa dados do JSON
-            function importData(event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
+            // (NOVO) Importa os dados (JSON)
+            function importData(e) {
+                const file = e.target.files[0];
+                if (!file) {
+                    return;
+                }
+                
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = (event) => {
                     try {
-                        const importedData = JSON.parse(e.target.result);
-                        
-                        // Validação simples
-                        if (Array.isArray(importedData)) {
-                            // Substitui os dados atuais
-                            transactions = importedData;
+                        const data = JSON.parse(event.target.result);
+                        if (data && data.transactions && data.categories) {
+                            // Validação simples (pode ser mais robusta)
+                            transactions = data.transactions;
+                            savedCategories = data.categories;
+                            
                             saveTransactions();
-                            updateUI();
+                            saveCategories();
+                            updateUI(); // Atualiza a UI com os novos dados
+                            
                             showToast('Backup importado com sucesso!');
                         } else {
-                            throw new Error('Arquivo JSON inválido.');
+                            showToast('Arquivo de backup inválido.', true);
                         }
                     } catch (error) {
-                        console.error('Erro ao importar:', error);
-                        showToast('Erro ao importar o arquivo.', true);
+                        console.error('Erro ao importar backup:', error);
+                        showToast('Erro ao ler o arquivo de backup.', true);
                     }
                 };
                 reader.readAsText(file);
-                // Reseta o input para permitir importar o mesmo arquivo de novo
-                event.target.value = null; 
+                
+                configMenu.classList.add('hidden');
+                // Limpa o input para permitir importar o mesmo arquivo novamente
+                e.target.value = null; 
+            }
+
+            // (CORRIGIDO) Gera o relatório
+            function generateReport() {
+                const startDateStr = reportStartDateEl.value;
+                const endDateStr = reportEndDateEl.value;
+
+                if (!startDateStr || !endDateStr) {
+                    showToast('Por favor, selecione as datas de início e fim.', true);
+                    return;
+                }
+
+                // (ALTERADO) Corrige o parsing da data para incluir o dia final
+                const startDate = new Date(startDateStr + 'T00:00:00'); // Início do dia de início
+                const endDate = new Date(endDateStr + 'T23:59:59'); // Fim do dia final
+
+                if (endDate < startDate) {
+                    showToast('A data final deve ser maior ou igual à data inicial.', true);
+                    return;
+                }
+
+                // 1. Filtra transações (apenas despesas)
+                const filteredTx = transactions.filter(tx => {
+                    const txDate = new Date(tx.date);
+                    return tx.type === 'expense' && txDate >= startDate && txDate <= endDate;
+                });
+
+                if (filteredTx.length === 0) {
+                    reportResultsEl.innerHTML = '<p class="text-center text-gray-500">Nenhuma despesa encontrada neste período.</p>';
+                    reportResultsEl.classList.remove('hidden');
+                    return;
+                }
+
+                // 2. Agrupa por categoria
+                const categoryTotals = {};
+                let totalReportExpense = 0;
+    
+                filteredTx.forEach(tx => {
+                    const category = tx.category || 'Sem Categoria'; // Caso alguma esteja vazia
+                    if (!categoryTotals[category]) {
+                        categoryTotals[category] = 0;
+                    }
+                    categoryTotals[category] += tx.amount;
+                    totalReportExpense += tx.amount;
+                });
+
+                // 3. Renderiza os resultados
+                reportResultsEl.innerHTML = ''; // Limpa resultados antigos
+                
+                // Converte para array, ordena do maior para o menor gasto
+                const sortedCategories = Object.entries(categoryTotals)
+                    .sort(([, amountA], [, amountB]) => amountB - amountA);
+
+                let resultsHTML = '<ul class="space-y-2">';
+                sortedCategories.forEach(([category, amount]) => {
+                    resultsHTML += `
+                        <li class="flex justify-between items-center bg-gray-700 p-2.5 rounded-md">
+                            <span class="text-gray-200">${category}</span>
+                            <span class="font-semibold text-gray-100">${formatCurrency(amount)}</span>
+                        </li>
+                    `;
+                });
+                resultsHTML += '</ul>';
+
+                // Adiciona o total
+                resultsHTML += `
+                    <div class="border-t border-gray-600 mt-3 pt-3 flex justify-between">
+                        <span class="font-bold text-gray-100">Total do Período:</span>
+                        <span class="font-bold text-gray-100 text-lg">${formatCurrency(totalReportExpense)}</span>
+                    </div>
+                `;
+
+                reportResultsEl.innerHTML = resultsHTML;
+                reportResultsEl.classList.remove('hidden');
             }
 
             // --- Event Listeners ---
@@ -648,7 +862,17 @@
             });
             exportBtn.addEventListener('click', exportData);
             importFileInput.addEventListener('change', importData);
-
+ 
+            // (NOVO) Listener do Relatório
+            reportBtn.addEventListener('click', openReportModal);
+            reportModalCloseBtn.addEventListener('click', closeReportModal);
+            reportModal.addEventListener('click', (e) => {
+                if (e.target === reportModal) {
+                    closeReportModal();
+                }
+            });
+            generateReportBtnEl.addEventListener('click', generateReport);
+ 
             // (NOVO) Fechar menu de config se clicar fora
             document.addEventListener('click', (e) => {
                 // Fecha o menu se o clique NÃO for no botão E NÃO for dentro do menu
@@ -665,7 +889,10 @@
                 
                 if (deleteBtn) {
                     const id = Number(deleteBtn.dataset.id); // Pega o ID do atributo data-id
-                    deleteTransaction(id);
+                    // (NOVO) Adiciona uma confirmação simples (sem window.confirm)
+                    if (confirm('Tem certeza que deseja apagar esta transação?')) {
+                         deleteTransaction(id);
+                    }
                 }
             });
 
