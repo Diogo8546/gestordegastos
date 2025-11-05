@@ -624,6 +624,7 @@
                 
                 let totalIncome = 0;
                 let totalExpense = 0;
+                let balanceAffectingExpense = 0; // (NOVO) Apenas despesas que afetam o saldo (Pix)
                 
                 // (NOVO) Objetos para o resumo de gastos
                 const now = new Date();
@@ -653,7 +654,12 @@
                     if (tx.type === 'income') {
                         totalIncome += tx.amount;
                     } else {
-                        totalExpense += tx.amount;
+                        totalExpense += tx.amount; // Continua somando TODAS as despesas para o card "Despesas"
+                        
+                        // (NOVO) Apenas 'pix' afeta o saldo principal
+                        if (tx.paymentMethod === 'pix') {
+                            balanceAffectingExpense += tx.amount;
+                        }
                         
                         // Lógica para o Resumo de Gastos
                         const txDateOnly = new Date(txDate.getFullYear(), txDate.getMonth(), txDate.getDate());
@@ -680,7 +686,7 @@
                 });
                 
                 // Atualiza o Header e os Cards
-                const balance = totalIncome - totalExpense;
+                const balance = totalIncome - balanceAffectingExpense; // (ALTERADO) Usa a nova variável
                 balanceEl.textContent = formatCurrency(balance);
                 // Muda a cor do saldo se for negativo
                 balanceEl.classList.toggle('text-red-400', balance < 0);
