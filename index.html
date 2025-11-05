@@ -26,10 +26,14 @@
         /* Define a fonte padrão */
         html {
             color-scheme: dark; /* Ajuda a estilizar inputs nativos (como o de data) para o modo escuro */
+            overflow: hidden; /* (NOVO) Impede a rolagem do documento */
+            height: 100%;     /* (NOVO) Garante que o html preencha a viewport */
         }
         body {
             font-family: 'Inter', sans-serif;
             overflow: hidden; /* FIX: Impede a rolagem da página inteira */
+            height: 100%;     /* (NOVO) Garante que o body preencha o html */
+            position: relative; /* (NOVO) Necessário para alguns layouts móveis */
         }
         
         /* A tela principal do app */
@@ -37,7 +41,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            height: 100vh; /* FIX: Trava a altura do app na altura da tela */
+            height: 100%; /* (ALTERADO) Ocupa 100% do body (que agora está travado) */
             background-color: #030712; /* Fundo super escuro (gray-950) */
             overflow: hidden; /* Garante que o conteúdo não vaze da tela */
             
@@ -63,7 +67,7 @@
     <div class="app-screen">
 
         <!-- 1. Cabeçalho Principal (Saldo) -->
-            <header class="bg-indigo-700 text-white p-6 rounded-b-3xl shadow-lg z-10 relative">
+            <header class="bg-indigo-700 text-white p-6 rounded-b-3xl shadow-lg z-30 relative"> <!-- (ALTERADO) z-10 para z-30 -->
                 <div class="flex justify-between items-center"> <!-- Wrapper para alinhar saldo e config -->
                     <div>
                         <div class="text-sm font-medium opacity-80">Saldo Atual</div>
@@ -89,7 +93,7 @@
             </header>
 
             <!-- 2. Cartões de Resumo (Receitas/Despesas) -->
-            <div class="grid grid-cols-2 gap-4 p-4 mt-[-40px]"> <!-- MT negativo para sobrepor o header -->
+            <div class="grid grid-cols-2 gap-4 p-4 mt-4"> <!-- (ALTERADO) -mt-8 para mt-4 (sem sobreposição) -->
                 <!-- Card Receitas -->
                 <div class="bg-gray-800 p-4 rounded-2xl shadow-lg shadow-black/20 flex items-center gap-3 z-20">
                     <!-- Ícone (seta para cima) -->
